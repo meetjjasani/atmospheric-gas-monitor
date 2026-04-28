@@ -26,6 +26,16 @@ data/exports/*
 
 logs/
 
+# ── Test fixtures data (confidential sensor data) ─────────────────────────────
+tests/fixtures/sample_data/*
+!tests/fixtures/sample_data/.gitkeep
+
 # ── Build artifacts ────────────────────────────────────────────────────────────
 dist/
 build/
+
+# ── All data file types ────────────────────────────────────────────────────────
+*.dat
+*.parquet
+*.png
+*.csv
