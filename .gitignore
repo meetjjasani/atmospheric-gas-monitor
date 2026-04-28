@@ -1,0 +1,31 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# ── IDE & OS ───────────────────────────────────────────────────────────────────
+.idea/
+.DS_Store
+
+# ── AI tools ──────────────────────────────────────────────────────────────────
+.claude/
+
+# ── Raw sensor data (proprietary, not committed) ───────────────────────────────
+data/raw/*
+!data/raw/.gitkeep
+
+# ── Generated pipeline outputs (recreated by running prl-pipeline) ────────────
+data/processed/*
+!data/processed/.gitkeep
+
+data/exports/*
+!data/exports/.gitkeep
+
+logs/
+
+# ── Build artifacts ────────────────────────────────────────────────────────────
+dist/
+build/

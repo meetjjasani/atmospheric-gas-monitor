@@ -1,0 +1,23 @@
+{
+  "project_root": ".",
+  "data_root": "data/raw/2025",
+  "month_dirs": ["11", "12"],
+  "qc": {
+    "hourly_group_min_samples": 12,
+    "point_spike_z": 8.0,
+    "hourly_spike_z": 6.0,
+    "hourly_reference_window_hours": 168,
+    "hourly_reference_min_periods": 24,
+    "sustained_shift_min_hours": 6,
+    "hard_bounds": {
+      "co_sync": {"min": 0.0, "max": null},
+      "co2_sync": {"min": 0.0, "max": null},
+      "ch4_sync": {"min": 0.0, "max": null}
+    }
+  },
+  "output": {
+    "processed_dir": "data/processed",
+    "plots_dir": "data/plots",
+    "logs_dir": "logs"
+  }
+}
