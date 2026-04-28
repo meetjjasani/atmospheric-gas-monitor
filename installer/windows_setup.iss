@@ -15,17 +15,13 @@ AppUpdatesURL={#MyAppURL}/releases
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=
 OutputDir=dist
 OutputBaseFilename=PRL-Dashboard-{#MyAppVersion}-Setup
-SetupIconFile=
-Compression=lzma2/ultra64
+Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-WizardResizable=no
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
-PrivilegesRequiredOverridesAllowed=dialog
 UninstallDisplayName={#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 MinVersion=10.0
@@ -34,17 +30,15 @@ MinVersion=10.0
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "Create a &desktop shortcut"; GroupDescription: "Additional shortcuts:"; Flags: checked
+Name: "desktopicon"; Description: "Create a &desktop shortcut"; GroupDescription: "Additional shortcuts:"
 
 [Files]
 Source: "dist\PRL Dashboard\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\{#MyAppName}";                       Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\Uninstall {#MyAppName}";             Filename: "{uninstallexe}"
-Name: "{autodesktop}\{#MyAppName}";                 Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{group}\{#MyAppName}";              Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\Uninstall {#MyAppName}";   Filename: "{uninstallexe}"
+Name: "{autodesktop}\{#MyAppName}";       Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; \
-  Description: "Launch {#MyAppName}"; \
-  Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "Launch {#MyAppName}"; Flags: nowait postinstall skipifsilent
