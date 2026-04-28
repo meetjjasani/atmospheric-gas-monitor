@@ -25,14 +25,19 @@ jobs:
       - name: Build .exe with PyInstaller
         run: python installer/build.py
 
-      - name: Zip the build output
-        run: Compress-Archive -Path "dist\PRL Dashboard\*" -DestinationPath "PRL-Dashboard-${{ github.ref_name }}-Windows.zip"
+      - name: Build Windows installer with Inno Setup
         shell: pwsh
+        env:
+          APP_VERSION: ${{ github.ref_name }}
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          & $iscc installer/windows_setup.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: PRL-Dashboard-${{ github.ref_name }}-Windows.zip
+          files: dist/PRL-Dashboard-${{ github.ref_name }}-Setup.exe
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
