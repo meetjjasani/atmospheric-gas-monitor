@@ -24,6 +24,7 @@ from PySide6.QtWidgets import (
 
 from prl.app.dashboard_controller import DashboardController
 from prl.app.styles import load_theme_stylesheet
+from prl.app.update_checker import UpdateChecker
 from prl.app.widgets import (
     FiltersPanel,
     FiltersPanelState,
@@ -236,6 +237,10 @@ class MainWindow(QMainWindow):
             return
         self._launch_geometry_synced = True
         QTimer.singleShot(0, self._apply_launch_geometry)
+        # Check for new releases on GitHub once per launch (3 s after window shows
+        # so the dashboard finishes painting first; popup only appears on update).
+        self._update_checker = UpdateChecker(self)
+        QTimer.singleShot(3000, self._update_checker.check_async)
 
     def _apply_launch_geometry(self) -> None:
         from prl.app.windowing import fit_window_to_available_screen
