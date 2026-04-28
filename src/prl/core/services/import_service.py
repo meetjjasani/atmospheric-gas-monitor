@@ -8,14 +8,16 @@ from prl.core.monitoring import setup_pipeline_logging
 from prl.core.services.pipeline_service import load_pipeline_config, process_batch
 from prl.core.storage.catalog import FileCatalog
 from prl.core.storage.database import Database
+from prl.infrastructure.runtime_paths import app_config_path, processed_data_dir, app_logs_dir
 
 
 
-def clear_database(config_path: Path = Path("config/config.json")) -> None:
+def clear_database(config_path: Path | None = None) -> None:
     """Wipe the local partitioned database, hourly cache, and ingestion catalog."""
+    if config_path is None:
+        config_path = app_config_path()
     cfg = load_pipeline_config(config_path)
-    project_root = Path(cfg["project_root"]).resolve()
-    processed_dir = project_root / cfg["output"]["processed_dir"]
+    processed_dir = processed_data_dir()
 
     # Raw row store
     db_root = processed_dir / "db"
@@ -34,11 +36,9 @@ def clear_database(config_path: Path = Path("config/config.json")) -> None:
 
 
 
-def get_last_import_date(config_path: Path = Path("config/config.json")) -> datetime | None:
+def get_last_import_date(config_path: Path | None = None) -> datetime | None:
     """Read the last sync date from the catalog if it exists."""
-    cfg = load_pipeline_config(config_path)
-    project_root = Path(cfg["project_root"]).resolve()
-    catalog_path = project_root / cfg["output"]["processed_dir"] / "ingest_catalog.json"
+    catalog_path = processed_data_dir() / "ingest_catalog.json"
     
     catalog = FileCatalog(catalog_path)
     last = catalog.last_sync
@@ -53,20 +53,21 @@ def get_last_import_date(config_path: Path = Path("config/config.json")) -> date
 
 def import_raw_folders(
     folder_paths: Iterable[Path],
-    config_path: Path = Path("config/config.json"),
+    config_path: Path | None = None,
     progress_callback: Callable[[str], None] | None = None,
     percentage_callback: Callable[[int], None] | None = None,
     force_reimport: bool = False
 ) -> dict:
-    """Enterprise-grade entry point for data ingestion.
-    
+    """Entry point for data ingestion.
+
     Returns a summary dict with {new_files, skipped_files, row_count, last_sync}.
     """
     # 1. Setup Logging & Config
+    if config_path is None:
+        config_path = app_config_path()
     cfg = load_pipeline_config(config_path)
-    project_root = Path(cfg["project_root"]).resolve()
-    out_data = project_root / cfg["output"]["processed_dir"]
-    out_logs = project_root / cfg["output"]["logs_dir"]
+    out_data = processed_data_dir()
+    out_logs = app_logs_dir()
     
     logger = setup_pipeline_logging(out_logs)
     

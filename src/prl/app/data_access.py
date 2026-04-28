@@ -8,6 +8,7 @@ import pandas as pd
 
 from prl.core.constants import GASES
 from prl.core.storage.database import Database
+from prl.infrastructure.runtime_paths import processed_data_dir
 
 REQUIRED_COLUMNS = ["datetime_ist", "date_ist", "hour_ist", *GASES]
 
@@ -34,7 +35,9 @@ class DashboardDataRepository:
     Load time:    raw ~2-3 s (5 yr)  →  hourly < 10 ms (5 yr)
     """
 
-    def __init__(self, db_root: Path = Path("data/processed/db")) -> None:
+    def __init__(self, db_root: Path | None = None) -> None:
+        if db_root is None:
+            db_root = processed_data_dir() / "db"
         self._db_root = db_root
         self._db = Database(db_root)
         self._summary: DataSummary | None = None

@@ -37,6 +37,33 @@ def user_data_root() -> Path:
         return fallback
 
 
+def app_config_path() -> Path:
+    """Resolve config.json for both frozen .exe and dev mode."""
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / "config" / "config.json"
+    return Path(__file__).resolve().parents[3] / "config" / "config.json"
+
+
+def processed_data_dir() -> Path:
+    """Writable directory for the processed database and ingest catalog."""
+    if getattr(sys, "frozen", False):
+        path = user_data_root() / "data" / "processed"
+    else:
+        path = Path(__file__).resolve().parents[3] / "data" / "processed"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def app_logs_dir() -> Path:
+    """Writable directory for pipeline logs."""
+    if getattr(sys, "frozen", False):
+        path = user_data_root() / "logs"
+    else:
+        path = Path(__file__).resolve().parents[3] / "logs"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
 def bundled_processed_dir() -> Path:
     return bundle_root() / "data" / "processed"
 
